@@ -1,20 +1,47 @@
 package com.example.catsloader.ui.main
 
-import androidx.lifecycle.MutableLiveData
+import android.os.Parcelable
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.catsloader.Repository
 import com.example.catsloader.model.Cat
-import kotlinx.coroutines.launch
 
-class MainViewModel(private val repository: Repository) : ViewModel() {
+class MainViewModel : ViewModel() {
     
-    val myResponse: MutableLiveData<List<Cat>> = MutableLiveData()
-    
-    fun getCat(){
-        viewModelScope.launch{
-            val response : List<Cat> = repository.getCat()
-            myResponse.value = response
+    val getResponse: ArrayList<Cat> get() = savedList
+
+    fun getCatList(list: ArrayList<Cat>?) {
+        if (list != null) {
+            savedList.addAll(list)
         }
+    }
+
+    fun clearList() {
+        getResponse.clear()
+    }
+
+    val getCurrentFragment: Fragment? get() = currentFragment
+
+    fun saveCurrentFragment(fragment: Fragment) {
+        currentFragment = fragment
+    }
+
+    val getFragmentManager: FragmentManager? get() = fManager
+
+    fun saveFragmentManager(fragmentM: FragmentManager) {
+        fManager = fragmentM
+    }
+
+    val getCatParcelable: Parcelable? get() = catParcelable
+
+    fun saveCatParcelable(parcelableCat: Parcelable?) {
+        catParcelable = parcelableCat
+    }
+
+    companion object{
+        private var savedList = arrayListOf<Cat>()
+        private var currentFragment: Fragment? = null
+        private var fManager: FragmentManager? = null
+        private var catParcelable: Parcelable? = null
     }
 }
